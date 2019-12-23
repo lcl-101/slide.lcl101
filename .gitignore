@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+logs/
+node_modules/
+.idea/
+package-lock.json
