@@ -1,0 +1,21 @@
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td{margin:0;padding:0;}
+
+#banner {
+    width: 100%;
+    height: 500px;
+}
+#banner .slide-item {
+    text-align: center;
+    line-height: 500px;
+    font-size: 30px;
+    color: #fff;
+}
+#banner .slide-item:nth-child(1) {
+    background: #39A08D;
+}
+#banner .slide-item:nth-child(2) {
+    background: #5256A0;
+}
+#banner .slide-item:nth-child(3) {
+    background: #A05560;
+}
