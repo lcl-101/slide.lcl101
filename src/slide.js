@@ -46,7 +46,7 @@
   }
   Slide.prototype = {
     initData: function(){
-      var that = this;
+      const that = this;
       try {
         this.el.find('.slide-item').hide();
         this.el.find('.slide-item').eq(0).stop(true,false).show();
@@ -69,7 +69,7 @@
       }
     },
     initEvent: function(){
-      var that = this;
+      const that = this;
       this.el.delegate('.slide-pagination-bullet', 'click', function(event) {
         that.slideChage.call(this, that);
       });
@@ -89,7 +89,7 @@
       });
     },
     autoPlayer: function(){
-      var that = this;
+      const that = this;
       this.move = function(){
         if(that.on.slideChangeStart){
           that.on.slideChangeStart({index: that.data.index + 1});
@@ -116,8 +116,8 @@
       that.data.play = setInterval(that.move,that.props.time);
     },
     slideChage: function(that){
-      var _this = $(this);
-      var index = _this.attr('data-index');
+      const _this = $(this);
+      const index = _this.attr('data-index');
       if(index === that.data.index){
         return;
       }
