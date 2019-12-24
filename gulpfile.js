@@ -25,7 +25,7 @@ gulp.task('build:js',function(){
 });
 
 /**
- *
+ * default
  */
 gulp.task('default',function(callback){
     plugins.sequence(
