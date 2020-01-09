@@ -1,21 +1,35 @@
 ///<<reference path="@types/jquery"/>
 
+/**
+ * [Slide 轮播图插件]
+ * author lichenglong
+ * @param       {string} el     [容器]
+ * @param       {{init: boolean, on: {slideChangeStart: on.slideChangeStart, slideChangeEnd: on.slideChangeEnd}}} config [配置项]
+ * @constructor
+ */
+
+interface Window {
+    Slide:any
+}
+
 class Slide {
     el: any;
-    config: any;
     private props: {
         init: boolean;
         time: number;
     };
-    private on: {};
+    private on: {
+        slideChangeStart: any,
+        slideChangeEnd: any
+    };
     private data: {
         index: number;
         next: number;
         prev: number;
-        play: null | void;
+        play: any;
         isPagination: any;
     };
-    private move: null;
+    private move: any;
     constructor(el: any, config: any) {
         this.el = $(el);
         //传入数据
@@ -43,7 +57,6 @@ class Slide {
     };
     initData (){
         const that = this;
-        console.log(this);
         try {
             this.el.find('.slide-item').hide();
             this.el.find('.slide-item').eq(0).stop(true,false).show();
@@ -57,8 +70,9 @@ class Slide {
             }
 
             if(this.props.init){
-                // this.autoPlayer();
+                this.autoPlayer();
             }
+            this.initEvent();
         } catch (e) {
             console.log(e);
         }
@@ -69,10 +83,51 @@ class Slide {
             // @ts-ignore
             that.slideChage.call(this, that);
         });
+        this.el.on('mouseenter', function(event:any) {
+            if(that.data.play){
+                clearInterval(that.data.play);
+                that.data.play = '';
+                console.log('enter');
+            }
+        });
+        this.el.on('mouseleave', function(event:any) {
+            if(that.data.play){
+                return;
+            }
+            that.data.play = setInterval(that.move,that.props.time);
+            console.log('leave');
+        });
+    };
+    autoPlayer (){
+        const that = this;
+        this.move = function(){
+            if(that.on.slideChangeStart){
+                that.on.slideChangeStart({index: that.data.index + 1});
+            }
+
+            that.data.next++;
+            if(that.data.next >= that.el.find('.slide-item').length){
+                that.data.next = 0;
+            }
+            that.el.find('.slide-item').eq(that.data.index).stop(true,false).fadeOut();
+            that.el.find('.slide-item').eq(that.data.next).stop(true,false).fadeIn();
+
+            if(that.data.isPagination){
+                that.el.find('.slide-pagination-bullet').eq(that.data.index).removeClass('active');
+                that.el.find('.slide-pagination-bullet').eq(that.data.next).addClass('active');
+            }
+            that.data.index = that.data.next;
+
+            if(that.on.slideChangeEnd){
+                that.on.slideChangeEnd({index: that.data.index + 1});
+            }
+        };
+        clearInterval(that.data.play);       //创建定时器前先清除掉上一个定时器
+        that.data.play = setInterval(that.move,that.props.time);
     };
     slideChage (that:any){
         const _this = $(this);
-        const index = _this.attr('data-index');
+        const index:any = _this.attr('data-index');
         if(index === that.data.index){
             return;
         }
@@ -98,6 +153,4 @@ class Slide {
     }
 }
 
-const test = new Slide('.box',{
-    init: true
-});
+window.Slide = Slide;
