@@ -11,6 +11,7 @@ const JS_PATH = path.resolve(__dirname, '../static/module/'); //模板目录
 
 //生成环境
 const NODE_ENV = process.env.NODE_ENV;
+let isProduction = NODE_ENV ==='production' ? true : false;
 
 // 页面入口
 const pageEntry = {};
@@ -43,8 +44,8 @@ module.exports = merge(baseConfig,{
     output: {
         path: path.resolve(__dirname, '../dist/'),
         publicPath: config.build.publicPath,
-        filename: "[name]/[name].[chunkhash].js",
-        chunkFilename:'[name].[chunkhash].bundle.js'
+        filename: isProduction ? "[name]/[name].min.js": "[name]/[name].js",
+        chunkFilename: isProduction ? '[name].min.js': '[name].js'
     },
     mode: NODE_ENV,
     devServer:{
