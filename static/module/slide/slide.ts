@@ -81,13 +81,12 @@ class Slide {
         const that = this;
         this.el.delegate('.slide-pagination-bullet', 'click', function(event:any) {
             // @ts-ignore
-            that.slideChage.call(this, that);
+            that.slideChange.call(this, that);
         });
         this.el.on('mouseenter', function(event:any) {
             if(that.data.play){
                 clearInterval(that.data.play);
                 that.data.play = '';
-                console.log('enter');
             }
         });
         this.el.on('mouseleave', function(event:any) {
@@ -95,7 +94,6 @@ class Slide {
                 return;
             }
             that.data.play = setInterval(that.move,that.props.time);
-            console.log('leave');
         });
     };
     autoPlayer (){
@@ -125,7 +123,7 @@ class Slide {
         clearInterval(that.data.play);       //创建定时器前先清除掉上一个定时器
         that.data.play = setInterval(that.move,that.props.time);
     };
-    slideChage (that:any){
+    slideChange (that:any){
         const _this = $(this);
         const index:any = _this.attr('data-index');
         if(index === that.data.index){
