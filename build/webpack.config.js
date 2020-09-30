@@ -4,6 +4,8 @@ const merge = require('webpack-merge');
 const config = require('../config/index');
 const baseConfig = require('./webpack.base.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const EndWebpackPlugin = require('./EndWebpackPlugin');
+const exec = require('child_process').exec;
 
 const ROOT_PATH = path.resolve(__dirname); //源码目录
 const VIEWS_PATH = path.resolve(__dirname, '../static/view/'); //模板目录
@@ -19,7 +21,7 @@ const pageEntry = {};
 const pageHtml = [];
 //入口页面
 const pages = fs.readdirSync(VIEWS_PATH);
-console.log(pages);
+
 pages.forEach((name, index) => {
     //入口路径
     const entryPath = path.join(VIEWS_PATH, name);
@@ -34,8 +36,6 @@ pages.forEach((name, index) => {
         chunks: [name]
     }));
 });
-
-console.log(pageEntry);
 
 module.exports = merge(baseConfig,{
     entry: Object.assign(pageEntry, {
@@ -55,6 +55,17 @@ module.exports = merge(baseConfig,{
         open: true
     },
     plugins: [
-
+        new EndWebpackPlugin(() => {
+            exec('ls -al', function(error, stdout, stderr){
+                if(error) {
+                    console.error('error: ' + error);
+                    return;
+                }
+                console.log('stdout: ' + stdout);
+                console.log('stderr: ' + typeof stderr);
+            });
+        },(err) => {
+            console.log(err);
+        })
     ].concat(pageHtml)
 });
